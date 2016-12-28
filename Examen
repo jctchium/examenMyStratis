@@ -1,0 +1,260 @@
+package examen;
+
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+import java.util.LinkedList;
+import java.util.StringTokenizer;
+
+/**
+ *
+ * @author jctch
+ */
+public class Main {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        int num = 8;
+        String str = "ANNA BAKES 80 CAKES IN THE NOON, 989216011";
+
+        String [] res = metodo(num, str);
+
+        System.out.println("Res");
+
+        for(String strres:res)
+        {
+            System.out.println(strres);
+        }
+
+    }
+
+    private static String [] metodo(int num, String str)
+    {
+        String strInput = str;
+
+        for(int i = 0; i < str.length(); i++)
+        {
+            //System.out.println(str.charAt(i));
+            if(!(((str.charAt(i) >= '0') && (str.charAt(i) <= '9')) || ((str.charAt(i) >= 'a') && (str.charAt(i) <= 'z')) || ((str.charAt(i) >= 'A') && (str.charAt(i) <= 'Z')) || (str.charAt(i) == ' ')))
+            {
+                //System.out.println("Si Criterio");
+                 //System.out.println("String a quitar " + str.substring(i,i+1));
+                strInput = strInput.replaceAll(str.substring(i,i+1), "");
+            }
+            else
+            {
+                //System.out.println("No Criterio");
+
+            }
+        }
+
+        //System.out.println("Striput: [" + strInput + "]");
+
+        StringTokenizer stz = new StringTokenizer(strInput);
+        int NumTokens = stz.countTokens();
+        LinkedList <String> Lista = new LinkedList<String>();
+
+        for(int i = 0; i < NumTokens; i++)
+        {
+            Lista.add(stz.nextToken());
+        }
+
+        String [] res = new String[NumTokens];
+        for(int i = 0; i < res.length; i++)
+        {
+            res[i] = Lista.get(i);
+
+
+
+            //res[i] = res[i].replaceAll(",", "");
+        }
+
+        LinkedList <String> ListaNumeros = new LinkedList<String>();
+        LinkedList <String> ListaPalabras = new LinkedList<String>();
+
+        for(int i = 0; i < res.length; i++)
+        {
+            try
+            {
+                Long.parseLong(res[i]);
+                ListaNumeros.add(res[i]);
+            }
+            catch(NumberFormatException ex)
+            {
+                ListaPalabras.add(res[i]);
+            }
+        }
+
+        /*System.out.print("Numeros: ");
+        if(ListaNumeros.size() > 0)
+        {
+            System.out.print(ListaNumeros.get(0));
+        }
+        for(int i = 1; i < ListaNumeros.size(); i++)
+        {
+            System.out.print(", " + ListaNumeros.get(i));
+        }
+        System.out.println("");*/
+
+        /*System.out.print("Palabras: ");
+        if(ListaPalabras.size() > 0)
+        {
+            System.out.print(ListaPalabras.get(0));
+        }
+        for(int i = 1; i < ListaPalabras.size(); i++)
+        {
+            System.out.print(", " + ListaPalabras.get(i));
+        }
+        System.out.println("");*/
+
+        LinkedList <String> ListaResNumerosTemp = new LinkedList<String>();
+        LinkedList <String> ListaResNumerosFinal = new LinkedList<String>();
+        String strNumTemp = "", strNumTemp2 = "";
+        String substrNumTemp = "";
+        int intsubstrNumTemp = 0;
+        int criterio = 0;
+
+        for(int i = 0; i < ListaNumeros.size(); i++)
+        {
+            ListaResNumerosTemp = new LinkedList<String>();
+
+            strNumTemp = ListaNumeros.get(i);
+            for(int j = 0; j < strNumTemp.length(); j++)
+            {
+                for(int k = 0; k <= strNumTemp.length(); k++)
+                {
+                    //System.out.println("Corrida j: " + j + "k: " + k);
+                    if(k >= j)
+                    {
+                        substrNumTemp = strNumTemp.substring(j, k);
+                        //System.out.println("Sub " + substrNumTemp);
+                        try
+                        {
+                            intsubstrNumTemp = Integer.parseInt(substrNumTemp);
+                        }
+                        catch(NumberFormatException ex)
+                        {}
+
+                        if((intsubstrNumTemp % num) == 0)
+                        {
+                            ListaResNumerosTemp.add(substrNumTemp);
+                        }
+                    }
+                }
+            }
+
+            for(int j = 0;  j < ListaResNumerosTemp.size(); j++)
+            {
+                strNumTemp2 = ListaResNumerosTemp.get(j);
+
+                if(j == 0)
+                {
+                    try
+                    {
+                        criterio = Integer.parseInt(strNumTemp2);
+                    }
+                    catch(NumberFormatException ex)
+                    {
+
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        if(Integer.parseInt(strNumTemp2) > criterio)
+                        {
+                            criterio = Integer.parseInt(strNumTemp2);
+                        }
+                    }
+                    catch(NumberFormatException ex)
+                    {
+
+                    }
+                }
+            }
+
+            ListaResNumerosFinal.add(new Integer(criterio).toString());
+
+            /*System.out.println("ResNumeros");
+            for(String s:ListaResNumeros)
+            {
+                System.out.println(s);
+            }*/
+
+
+        }
+
+        /*System.out.println("ResNumerosFinal");
+            for(String s:ListaResNumerosFinal)
+            {
+                System.out.println(s);
+            }*/
+
+
+        String strTemp = "";
+        String prefix = "";
+        String suffix = "";
+        String volteaSuffix = "";
+
+        LinkedList <String> ListaPalabrasFinal = new LinkedList<String>();
+
+        for(int i = 0; i < ListaPalabras.size(); i++)
+        {
+            strTemp = ListaPalabras.get(i).toUpperCase();
+            volteaSuffix = "";
+
+            if((strTemp.length() % 2) == 0)
+            {
+                //System.out.println(strTemp);
+
+                prefix = strTemp.substring(0,strTemp.length() / 2);
+                suffix = strTemp.substring(strTemp.length() / 2, strTemp.length());
+
+                for(int j = suffix.length(); j > 0 ; j--)
+                {
+                    volteaSuffix = volteaSuffix + suffix.substring(j-1, j);
+                }
+
+                if(prefix.compareTo(volteaSuffix) == 0)
+                {
+                    ListaPalabrasFinal.add(strTemp);
+                }
+
+                //System.out.println("prefix " + prefix + ", suffix" + suffix + ", suffix volteado " + volteaSuffix);
+            }
+        }
+
+        /*System.out.println("ResPalabrasFinal");
+            for(String s:ListaPalabrasFinal)
+            {
+                System.out.println(s);
+            }*/
+
+        LinkedList <String> ListaFinal = new LinkedList<String>();
+
+        for(String s:ListaResNumerosFinal)
+        {
+            ListaFinal.add(s);
+        }
+
+        for(String s:ListaPalabrasFinal)
+        {
+            ListaFinal.add(s);
+        }
+
+        String[] resTotal = new String[ListaFinal.size()];
+        for(int i = 0; i < resTotal.length; i++)
+        {
+            resTotal[i] = ListaFinal.get(i);
+        }
+
+        return resTotal;
+    }
+
+}
